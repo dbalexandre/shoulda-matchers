@@ -293,6 +293,11 @@ module Shoulda
           add_disallow_value_matcher
         end
 
+        def strict
+          @submatchers.each(&:strict)
+          self
+        end
+
         def only_integer
           prepare_submatcher(
             NumericalityMatchers::OnlyIntegerMatcher.new(@attribute)

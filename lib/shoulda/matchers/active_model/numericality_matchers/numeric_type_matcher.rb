@@ -8,6 +8,11 @@ module Shoulda
             raise NotImplementedError
           end
 
+          def strict
+            @disallow_value_matcher.strict
+            self
+          end
+
           def matches?(subject)
             @disallow_value_matcher.matches?(subject)
           end
