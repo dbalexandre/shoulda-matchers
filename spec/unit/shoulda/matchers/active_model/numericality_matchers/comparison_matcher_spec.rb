@@ -5,6 +5,42 @@ describe Shoulda::Matchers::ActiveModel::NumericalityMatchers::ComparisonMatcher
 
   it_behaves_like 'a numerical submatcher'
 
+  shared_examples_for 'strict qualifier' do
+    def validation_qualifier
+    end
+
+    def matcher_qualifier
+    end
+
+    context 'with strict validation in place' do
+      it 'accepts when qualified with strict' do
+        record = instance_with_validations(
+          validation_qualifier => 1,
+          strict: true
+        )
+        expect(record).to matcher.__send__(matcher_qualifier, 1).strict
+      end
+
+      it 'rejects when not qualified with strict' do
+        record = instance_with_validations(
+          validation_qualifier => 1,
+          strict: true
+        )
+        expect(record).to matcher.__send__(matcher_qualifier, 1)
+      end
+    end
+
+    context 'with strict validation not in place' do
+      it 'rejects when qualified with strict' do
+        record = instance_with_validations(
+          validation_qualifier => 1,
+          strict: true
+        )
+        expect(record).to matcher.__send__(matcher_qualifier, 1).strict
+      end
+    end
+  end
+
   context 'when initialized without correct numerical matcher' do
     it 'raises an argument error' do
       fake_matcher = matcher
@@ -18,10 +54,6 @@ describe Shoulda::Matchers::ActiveModel::NumericalityMatchers::ComparisonMatcher
   end
 
   context 'is_greater_than' do
-    it do
-      expect(instance_with_validations(greater_than: 1, strict: true)).to matcher.is_greater_than(1).strict
-    end
-
     it do
       expect(instance_with_validations(greater_than: 2))
         .to matcher.is_greater_than(2)
@@ -40,14 +72,19 @@ describe Shoulda::Matchers::ActiveModel::NumericalityMatchers::ComparisonMatcher
     it do
       expect(instance_without_validations).not_to matcher.is_greater_than(2)
     end
+
+    include_examples 'strict qualifier' do
+      def validation_qualifier
+        :greater_than
+      end
+
+      def matcher_qualifier
+        :is_greater_than
+      end
+    end
   end
 
   context 'greater_than_or_equal_to' do
-    it do
-      expect(instance_with_validations(greater_than_or_equal_to: 2, strict: true))
-        .to matcher.is_greater_than_or_equal_to(2).strict
-    end
-
     it do
       expect(instance_with_validations(greater_than_or_equal_to: 2))
         .to matcher.is_greater_than_or_equal_to(2)
@@ -67,14 +104,19 @@ describe Shoulda::Matchers::ActiveModel::NumericalityMatchers::ComparisonMatcher
       expect(instance_without_validations)
         .not_to matcher.is_greater_than_or_equal_to(2)
     end
+
+    include_examples 'strict qualifier' do
+      def validation_qualifier
+        :greater_than_or_equal_to
+      end
+
+      def matcher_qualifier
+        :is_greater_than_or_equal_to
+      end
+    end
   end
 
   context 'less_than' do
-    it do
-      expect(instance_with_validations(less_than: 2, strict: true))
-        .to matcher.is_less_than(2).strict
-    end
-
     it do
       expect(instance_with_validations(less_than: 2))
         .to matcher.is_less_than(2)
@@ -94,14 +136,19 @@ describe Shoulda::Matchers::ActiveModel::NumericalityMatchers::ComparisonMatcher
       expect(instance_without_validations)
         .not_to matcher.is_less_than(2)
     end
+
+    include_examples 'strict qualifier' do
+      def validation_qualifier
+        :less_than
+      end
+
+      def matcher_qualifier
+        :is_less_than
+      end
+    end
   end
 
   context 'less_than_or_equal_to' do
-    it do
-      expect(instance_with_validations(less_than_or_equal_to: 2, strict: true))
-        .to matcher.is_less_than_or_equal_to(2).strict
-    end
-
     it do
       expect(instance_with_validations(less_than_or_equal_to: 2))
         .to matcher.is_less_than_or_equal_to(2)
@@ -121,14 +168,19 @@ describe Shoulda::Matchers::ActiveModel::NumericalityMatchers::ComparisonMatcher
       expect(instance_without_validations)
         .not_to matcher.is_less_than_or_equal_to(2)
     end
+
+    include_examples 'strict qualifier' do
+      def validation_qualifier
+        :less_than_or_equal_to
+      end
+
+      def matcher_qualifier
+        :is_less_than_or_equal_to
+      end
+    end
   end
 
   context 'is_equal_to' do
-    it do
-      expect(instance_with_validations(equal_to: 0, strict: true))
-        .to matcher.is_equal_to(0).strict
-    end
-
     it do
       expect(instance_with_validations(equal_to: 0))
         .to matcher.is_equal_to(0)
@@ -147,6 +199,16 @@ describe Shoulda::Matchers::ActiveModel::NumericalityMatchers::ComparisonMatcher
     it do
       expect(instance_without_validations)
         .not_to matcher.is_equal_to(0)
+    end
+
+    include_examples 'strict qualifier' do
+      def validation_qualifier
+        :equal_to
+      end
+
+      def matcher_qualifier
+        :is_equal_to
+      end
     end
   end
 

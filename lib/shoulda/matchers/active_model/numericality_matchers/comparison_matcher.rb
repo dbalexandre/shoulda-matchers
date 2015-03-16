@@ -24,11 +24,6 @@ module Shoulda
             @strict = false
           end
 
-          def strict
-            @strict = true
-            self
-          end
-
           def for(attribute)
             @attribute = attribute
             self
